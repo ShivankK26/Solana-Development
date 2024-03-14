@@ -6,41 +6,41 @@ declare_id!("DTUAttzAbV6PAKp6Gz1mJgRcxR7FUx69ZFz6gUAJBti5");
 
 #[program]
 pub mod solana_anchor_program {
+    use anchor_lang::solana_program::entrypoint::ProgramResult;
+
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        let counter = &mut ctx.accounts.counter;
-        counter.count = 0;
-        msg!("Counter account created. Current count: {}", counter.count);
+    pub fn create(ctx: Context<Create>) -> ProgramResult {
+        let base_account = &mut ctx.accounts.base_account;
+        base_account.count = 0;
         Ok(())
     }
 
-    pub fn increment(ctx: Context<Update>) -> Result<()> {
-        let counter = &mut ctx.accounts.counter;
-        msg!("Previous counter: {}", counter.count());
-        counter.count = counter.count.checked_add(1).unwrap();
-        msg!("Counter incremented. Current counter: {}", counter.count);
+    pub fn increment(ctx: Context<Increment>) -> ProgramResult {
+        let base_account = &mut ctx.accounts.base_account;
+        base_account.count += 1;
         Ok(())
     }
 }
 
 #[derive(Accounts)]
-pub struct Initialize<'info> {
-    #[account(init, payer = user, space = 8 + 8)]
-    pub counter: Account<'info, Counter>,
+pub struct Create<'info> {
+    #[account(init, payer = user, space = 16 + 16)]
+    pub base_account: Account<'info, BaseAccount>,
     #[account(mut)]
     pub user: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
 
+// Transaction instructions
 #[derive(Accounts)]
-pub struct Update<'info> {
+pub struct Increment<'info> {
     #[account(mut)]
-    pub counter: Account<'info, Counter>,
-    pub user: Signer<'info>,
+    pub base_account: Account<'info, BaseAccount>,
 }
 
+// An account that goes inside a transaction instruction
 #[account]
-pub struct Counter {
+pub struct BaseAccount {
     pub count: u64,
 }
