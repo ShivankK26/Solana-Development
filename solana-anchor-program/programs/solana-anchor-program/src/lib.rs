@@ -1,13 +1,9 @@
-use std::simd::LaneCount;
-
 use anchor_lang::prelude::*;
 
 declare_id!("DTUAttzAbV6PAKp6Gz1mJgRcxR7FUx69ZFz6gUAJBti5");
 
 #[program]
 pub mod solana_anchor_program {
-    use anchor_lang::solana_program::entrypoint::ProgramResult;
-
     use super::*;
 
     pub fn create(ctx: Context<Create>) -> ProgramResult {

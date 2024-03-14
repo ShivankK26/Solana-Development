@@ -24,7 +24,7 @@ describe("solana-anchor-program", () => {
   const provider = anchor.Provider.env();
   anchor.setProvider(provider);
   const program = anchor.workspace.SolanaAnchorProgram;
-  it("Creates a counter)", async () => {
+  it("It creates the initial counter", async () => {
     /* Call the create function via RPC */
     const baseAccount = anchor.web3.Keypair.generate();
     await program.rpc.create({
@@ -45,7 +45,7 @@ describe("solana-anchor-program", () => {
     _baseAccount = baseAccount;
   });
 
-  it("Increments the counter", async () => {
+  it("Updating the previosuly created account", async () => {
     const baseAccount = _baseAccount;
 
     await program.rpc.increment({
